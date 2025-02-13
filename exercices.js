@@ -71,9 +71,32 @@ creerLesChoixEpoque(epoques);
 function quandEpoqueChoisie(nomEpoque) {
   nomEpoqueActuelle = nomEpoque;
   // Utilisation de votre fonction voyagerTemps
+  const localisation_epoque_element = document.querySelector('.localisation_epoque')
+  const voyage_en_cours_element = document.querySelector('.voyage_en_cours');
+  
+  localisation_epoque_element.style.display = 'none';
+  voyage_en_cours_element.style.display = 'block';
+  
+  voyagerTemps(nomEpoque, function () {
+    localisation_epoque_element.style.display = 'block';
+    voyage_en_cours_element.style.display = 'none';
+    afficherDestination(nomEpoque);
+  })
 }
 
 // Fonction appelée plus haut quand le formulaire de recherche d'artefact est soumis
 function quandRechercheArtefact(artefact) {
   // Utilisation de votre fonction collecterArtefact
 }
+
+//exo 1 Le Téléporteur Temporel
+
+function voyagerTemps(destination, callback){
+  console.log("Voyage en cours vers : ", destination)
+  setTimeout(() => {
+    console.log("Arrive à destination : ", destination)
+    callback()
+}, generationNombreAleatoireEntre(1000, 3000));
+};
+
+
