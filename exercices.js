@@ -87,6 +87,13 @@ function quandEpoqueChoisie(nomEpoque) {
 // Fonction appelée plus haut quand le formulaire de recherche d'artefact est soumis
 function quandRechercheArtefact(artefact) {
   // Utilisation de votre fonction collecterArtefact
+  collecterArtefact(artefact, function(success, artefact){
+    if(success){
+      console.log("artefact été trouvé ", artefact)
+    }else{
+      console.log("artefact n'est pas trouvé ", artefact)
+    }
+  })
 }
 
 //exo 1 Le Téléporteur Temporel
@@ -96,7 +103,28 @@ function voyagerTemps(destination, callback){
   setTimeout(() => {
     console.log("Arrive à destination : ", destination)
     callback()
-}, generationNombreAleatoireEntre(1000, 3000));
+  }, generationNombreAleatoireEntre(1000, 3000));
 };
+
+
+// exo 2 La Collecte d'Artefact Mystère
+
+function collecterArtefact(nomArtefact, callback){
+  console.log("Recherche artefact ", nomArtefact)
+  setTimeout(() => {
+    const chanceGainArtedact = Math.random() * 100;
+    console.log(chanceGainArtedact);
+    if(chanceGainArtedact >= 50){
+      //console.log("artefact trouvé ", nomArtefact)
+      callback(true, nomArtefact);
+    }else{
+      //console.log("artefact n'est pas trouvé ", nomArtefact)
+      callback(false, nomArtefact);
+    }
+  }, generationNombreAleatoireEntre(1000, 3000));
+};
+
+
+
 
 
