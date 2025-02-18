@@ -90,39 +90,21 @@ function quandEpoqueChoisie(nomEpoque) {
 // Fonction appelée plus haut quand le formulaire de recherche d'artefact est soumis
 function quandRechercheArtefact(artefact) {
   // Utilisation de votre fonction collecterArtefact
-  collecterArtefact(artefact, function (artefact) {
-    if (Math.random() > 0.5) {
-      afficherRechercheArtefact({
-        artefact: artefact,
-        epoque: nomEpoqueActuelle,
-        success: true,
-      });
-    } else {
-      afficherRechercheArtefact({
-        artefact: artefact,
-        epoque: nomEpoqueActuelle,
-        success: false,
-      });
-      // ? afficherRechercheArtefact({
-      //     artefact,
-      //     epoque: nomEpoqueActuelle,
-      //     success: true,
-      //   })
-      // : afficherRechercheArtefact({
-      //     artefact,
-      //     epoque: nomEpoqueActuelle,
-      //     success: false,
-      //   });
-    }
+  collecterArtefact(artefact, function (artefact, success) {
+    afficherRechercheArtefact({
+      artefact: artefact,
+      epoque: nomEpoqueActuelle,
+      success: success,
+    });
   });
 }
 
 //exo 1 Le Téléporteur Temporel
 
 function voyagerTemps(destination, callback) {
-  console.log("Voyage en cours vers : ", destination);
+  console.log("Voyage en cours vers :", destination);
   setTimeout(() => {
-    console.log("Arrive à destination : ", destination);
+    console.log("Arrive à destination :", destination);
     callback(destination);
   }, generationNombreAleatoireEntre(1000, 3000));
 }
@@ -130,9 +112,10 @@ function voyagerTemps(destination, callback) {
 // exo 2 La Collecte d'Artefact Mystère
 
 function collecterArtefact(nomArtefact, callback) {
-  console.log("Recherche artefact: ", nomArtefact);
+  console.log("Recherche artefact :", nomArtefact);
+  const success = Math.random() > 0.5;
   setTimeout(() => {
-    callback(nomArtefact);
+    callback(nomArtefact, success);
   }, generationNombreAleatoireEntre(1000, 3000));
 }
 
@@ -140,50 +123,26 @@ function collecterArtefact(nomArtefact, callback) {
 
 function missionTemporelleComplexe() {
   voyagerTemps(epoques.medievale, function () {
-    collecterArtefact("épée de chevalier", function () {
-      if (Math.random() > 0.5) {
-        console.log(
-          "Artefact 'épée de chevalier' à l'époque ",
-          epoques.medievale,
-          " trouvé!"
-        );
+    collecterArtefact("épée de chevalier", function (art, success) {
+      if (success) {
+        console.log("Artefact", art, " trouvé!");
       } else {
-        console.log(
-          "Artefact 'épée de chevalier' à l'époque ",
-          epoques.medievale,
-          " n'étais pas trouvé!"
-        );
+        console.log("Artefact", art, " n'étais pas trouvé!");
       }
       voyagerTemps(epoques.romaine, function () {
-        collecterArtefact("bouclier romain", function () {
-          if (Math.random() > 0.5) {
-            console.log(
-              "Artefact 'bouclier romain' à l'époque ",
-              epoques.medievale,
-              " trouvé!"
-            );
+        collecterArtefact("bouclier romain", function (art, success) {
+          if (success) {
+            console.log("Artefact", art, " trouvé!");
           } else {
-            console.log(
-              "Artefact 'bouclier romain' à l'époque ",
-              epoques.medievale,
-              " n'étais pas trouvé!"
-            );
+            console.log("Artefact", art, " n'étais pas trouvé!");
           }
-          collecterArtefact("épée romaine", function () {
-            if (Math.random() > 0.5) {
-              console.log(
-                "Artefact 'épée romaine' à l'époque ",
-                epoques.medievale,
-                " trouvé!"
-              );
+          collecterArtefact("épée romaine", function (art, success) {
+            if (success) {
+              console.log("Artefact", art, " trouvé!");
             } else {
-              console.log(
-                "Artefact 'épée romaine' à l'époque ",
-                epoques.medievale,
-                " n'étais pas trouvé!"
-              );
+              console.log("Artefact", art, " n'étais pas trouvé!");
             }
-            console.log("Mission Temporelle Complexeterminée!");
+            console.log("Mission Temporelle Complexe terminée!");
           });
         });
       });
@@ -191,4 +150,53 @@ function missionTemporelleComplexe() {
   });
 }
 
-missionTemporelleComplexe();
+// missionTemporelleComplexe();
+
+// exo 4 Je te promet des voyages temporels sans tracas !
+
+function voyagerTempsPromesse(destination) {
+  console.log("Voyage en cours vers : ", destination);
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(destination);
+    }, generationNombreAleatoireEntre(1000, 3000));
+  });
+}
+
+function collecterArtefactPromesse(nomArtefact) {
+  console.log("Recherche artefact: ", nomArtefact);
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (Math.random() >= 0.5) {
+        resolve(nomArtefact);
+      } else {
+        reject(nomArtefact);
+      }
+    }, generationNombreAleatoireEntre(1000, 3000));
+  });
+}
+
+voyagerTempsPromesse(epoques.medievale)
+  .then((destination) => {
+    console.log("Arrive à destination : ", destination);
+    return collecterArtefactPromesse("épée de chevalier")
+      .then((result) => console.log(result, "a été trouvé"))
+      .catch((error) => console.error(error, "n'a pas été trouvé"));
+  })
+  .then(() => {
+    return voyagerTempsPromesse(epoques.romaine);
+  })
+  .then((destination) => {
+    console.log("Arrive à destination : ", destination);
+    return collecterArtefactPromesse("bouclier romain")
+      .then((result) => console.log(result, "a été trouvé"))
+      .catch((error) => console.error(error, "n'a pas été trouvé"));
+  })
+  .then(() => {
+    return collecterArtefactPromesse("épée romaine")
+      .then((result) => console.log(result, "a été trouvé"))
+      .catch((error) => console.error(error, "n'a pas été trouvé"));
+  })
+  .catch((error) => {
+    console.error("Erreur pendant le voyage :", error);
+  });
