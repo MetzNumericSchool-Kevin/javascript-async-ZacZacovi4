@@ -14,6 +14,10 @@
 
 - Tu es Chronos 🕰️, un voyageur temporel qui explore différentes époques et collecte des artefacts historiques rares via des missions asynchrones.
 
+## Note : Du code est déjà présent
+
+Tu verras dans le code JavaScript que plusieurs fonctions existent déjà. Soit curieux pour comprendre ce qui s'y passe.
+
 ## Exercices
 
 ### Le Téléporteur Temporel
@@ -25,6 +29,13 @@
 - Simuler un processus asynchrone simple.
 - Manipuler le DOM avec JavaScript pour gérer l'affichage d'un loader.
 
+**Résultat attendu :**
+
+- Quand une époque est choisie, on doit voir un "loader" de chargement à la place de "Actuelle (2025)".
+- Quand le votage temporel est terminé :
+  - Le loader disparaît.
+  - On doit voir le nom de l'époque apparaitre à la place de "Actuelle (2025)".
+
 **Instructions :**
 
 - Crée une fonction `voyagerTemps(destination, callback)` qui prend deux paramètres :
@@ -32,36 +43,53 @@
   - `callback` (une fonction à exécuter une fois le voyage terminé).
 - À l'intérieur de la fonction, utilise `setTimeout()` avec un délai aléatoire entre 1000 et 3000 ms.
   - Utilise la fonction `generationNombreAleatoireEntre(1000, 3000)`.
-  - Appelle la fonction de callback quand `setTimeout()` est terminé.
-- Avant l'utilisation de `voyagerTemps` :
-  - Cache l'époque de la destination du voyage (Noeud HTML `<span class="localisation_epoque">`)
-  - Affiche le "loader" de chargement (Noeud HTML `<span class="voyage_en_cours">`)
+  - Appelle la fonction de callback quand `setTimeout()` est terminée.
+- Affiche des `console.log()` pour que tu puisses comprendre ce qui se passe à l'éxécution :)
+  - Au début de la fonction `console.log("Voyage en cours vers la destination : ", destination)`.
+  - Au moment ou la fonction `setTimeout()` est terminée, `console.log("Arrivée à l'époque destination : ", destination)`.
+
+**Attention** : Cette fonction, la machine temporelle, n'a pas but de gérer le HTML !
 
 Exemple d'utilisation :
 
 ```js
-voyagerTemps(nomEpoque, function () {});
+voyagerTemps(nomEpoque, function () {
+  console.log("Execution de code quand le voyage est terminé.");
+});
 ```
+
+**Suite des instructions** :
+
+- Utilise cette fonction `voyageTemps()` dans la fonction `quandEpoqueChoisie()`
+- La fonction `quandEpoqueChoisie()` est appelée lors du choix d'une époque et après avoir cliquer sur le bouton "Voyager". Nous allons manipuler le HTML pour faire comprendre au voyageur qu'un voyage dans le temps est en cours.
+  - Dans le HTML, il y a déjà un élément qui représente un chargement (un loader) `<span class="voyage_en_cours"></span>`. Il est caché par défaut.
+- Lorsque l'on lance un voyage :
+  - Cache le nom de l'époque actuellement affichée dans `<span class="localisation_epoque">`.
+  - Affiche le loader.
+- Lorsque le voyage est terminé (donc dans la fonction de rappel de `voyageTemps`)
+  - Cache le loader.
+  - Utilise la fonction existante `afficherDestination(nomEpoque)` pour afficher le nom de l'époque de destination dans le HTML.
+
+**Note** : Tu peux utiliser `document.querySelector()` pour trouver un élément, et le cacher avec `element.style.display = "none"`. Ou le réafficher avec `element.style.display = ""` ou `element.style.display = "block"`.
 
 - Dans votre callback :
   - Cache le "loader".
   - Met à jour la noeud texte avec l'époque choisie dans `<span class="localisation_epoque">`.
   - Affiche l'époque de la destination.
 
-**Résultat attendu :**
-
-- Quand une époque est choisie, on doit voir un "loader" de chargement à la place de "Actuelle (2025)".
-- Quand le votage temportel est terminé :
-  - Le loader disparaît.
-  - On doit voir le nom de l'époque apparaitre à la place de "Actuelle (2025)".
-
 ### La Collecte d'Artefact Mystère
+
+**Note :** Tu vas faire la même chose que l'exercice précédent.
 
 **Objectifs :**
 
-- Même chose que le premier exercice.
-- Passer un argument à la fonction callback.
 - Cet exercice servira surtout pour la démonstration du prochain exercice.
+
+**Résultat attendu :**
+
+- Quand une collecte d'artefact est effectuée depuis le formulaire, on doit pouvoir voir dans la liste HTML :
+  - Artefact qui a bien été collecté.
+  - Ou artefact qui a échoué a être collecté.
 
 **Instructions :**
 
@@ -74,17 +102,24 @@ voyagerTemps(nomEpoque, function () {});
     - Si la collecte réussit, appeler le callback avec le premier argument à `true`.
     - Si la collecte échoue, appeler le callback avec le premier argument à `false`.
 
+**Attention** : Cette fonction, n'a pas but de gérer le HTML !
+
 Exemple d'utilisation :
 
 ```js
-collecterArtefact(nomEpoque, function (collecte_reussie) {});
+collecterArtefact(artefact, function (collecte_reussie) {});
 ```
 
-**Résultat attendu :**
+**Suite des instructions** :
 
-- Quand une collecte d'artefact est effectuée depuis le formulaire, on doit pouvoir voir dans la liste HTML :
-  - Artefact qui a bien été collecté.
-  - Ou artefact qui a échoué a être collecté.
+- Utilise cette fonction `collecterArtefact()` dans la fonction `quandRechercheArtefact()`
+- La fonction `quandRechercheArtefact()` est appelée lors du choix d'un artefact à rechercher et après avoir cliquer sur le bouton "Collecter". Nous allons manipuler le HTML pour faire comprendre au voyageur qu'une collecte d'artefact est en cours.
+- Pour la collecte, nous allons modifier le HTML de la même manière que l'exercice précédent.
+  - Lors d'une collecte :
+    - Affiche l'élément HTML de chargement `<div class="recherche_en_cours"></div>`.
+  - Lorsqu'une collecte est terminée :
+    - Cache l'élément HTML de chargement `<div class="recherche_en_cours"></div>`.
+    - Utilise la fonction existante `afficherRechercheArtefact` pour afficher la recherche d'un artefact, qu'il soit collecté ou non.
 
 ### La Mission Temporelle Complexe
 
@@ -121,6 +156,10 @@ Nous ne ferons plus de manipulation de DOM à partir de cet exercice.
 - Améliorer la lisibilité du code asynchrone
 - Maîtriser la gestion des erreurs avec `.catch()`
 
+**Résultat attendu :**
+
+- Même résultat qu'avant, mais code plus lisible.
+
 **Instructions :**
 
 - Réécritures des fonctions `voyagerTemps` et `collecterArtefact` en Promesses
@@ -142,9 +181,23 @@ const promise = new Promise((resolve, reject) => {
 });
 ```
 
-**Résultat attendu :**
+Rappel de l'utilisation d'une promesse :
 
-- Même résultat qu'avant, mais code plus lisible.
+```js
+fonctionQuiRetournePromesse()
+  .then(function (resultat_promesse) {
+    // Lorsque la promesse est résolue en succès
+    return "Coucou";
+  })
+  .then(function (resultat_promesse_precedente) {
+    // On peut chaîner plusieurs Promesses
+    console.log(resultat_promesse_precedente); // Affichera "Coucou"
+    throw new Error("Une erreur");
+  })
+  .catch(function (erreur_promesse) {
+    console.log(erreur_promesse); // Afifchera l'erreur "Une erreur"
+  });
+```
 
 ### La Mission Finale Asynchrone
 
@@ -152,21 +205,25 @@ const promise = new Promise((resolve, reject) => {
 
 - Maîtriser la syntaxe `async/await`
 
+**Résultat attendu :**
+
+- Même résultat qu'avant, mais avec une syntaxe alternative.
+
 **Instructions :**
 
 - Remplace la syntaxe `.then()` par la syntaxe `await`
 - Rend la fonction `missionTemporelleComplexe()` asynchrone avec `async`
 - Met un `try/catch` pour gérer les erreurs (il n'y a pas de `.catch()` avec async/await)
 
-**Résultat attendu :**
-
-- Même résultat qu'avant, mais avec une syntaxe alternative.
-
 ### Chargement asynchrone des époques
 
 **Objectifs :**
 
 - Première utilisation de `fetch` pour récupérer les données JSON des époques.
+
+**Résultat attendu :**
+
+- Les époques sont chargées de manière asynchrone.
 
 **Instructions :**
 
@@ -178,7 +235,3 @@ const promise = new Promise((resolve, reject) => {
   - Attention : Si vous êtes dans un sous-dossier du projet, vous devez mettre le chemin absolu vers le fichier `epoques.json`. Par exemple : `http://localhost:xxxx//sub_folder/data/epoques.json`
 
 **Note :** Tu peux voir l'appel HTTP de ton appel fetch dans l'onglet `Network` de ton outil de développement navigateur.
-
-**Résultat attendu :**
-
-- Les époques sont chargées de manière asynchrone.
