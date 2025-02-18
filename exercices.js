@@ -176,27 +176,67 @@ function collecterArtefactPromesse(nomArtefact) {
   });
 }
 
-voyagerTempsPromesse(epoques.medievale)
-  .then((destination) => {
-    console.log("Arrive à destination : ", destination);
-    return collecterArtefactPromesse("épée de chevalier")
-      .then((result) => console.log(result, "a été trouvé"))
-      .catch((error) => console.error(error, "n'a pas été trouvé"));
-  })
-  .then(() => {
-    return voyagerTempsPromesse(epoques.romaine);
-  })
-  .then((destination) => {
-    console.log("Arrive à destination : ", destination);
-    return collecterArtefactPromesse("bouclier romain")
-      .then((result) => console.log(result, "a été trouvé"))
-      .catch((error) => console.error(error, "n'a pas été trouvé"));
-  })
-  .then(() => {
-    return collecterArtefactPromesse("épée romaine")
-      .then((result) => console.log(result, "a été trouvé"))
-      .catch((error) => console.error(error, "n'a pas été trouvé"));
-  })
-  .catch((error) => {
+function missionTemporelleComplexePromesse() {
+  voyagerTempsPromesse(epoques.medievale)
+    .then((destination) => {
+      console.log("Arrive à destination : ", destination);
+      return collecterArtefactPromesse("épée de chevalier")
+        .then((result) => console.log(result, "a été trouvé"))
+        .catch((error) => console.error(error, "n'a pas été trouvé"));
+    })
+    .then(() => {
+      return voyagerTempsPromesse(epoques.romaine);
+    })
+    .then((destination) => {
+      console.log("Arrive à destination : ", destination);
+      return collecterArtefactPromesse("bouclier romain")
+        .then((result) => console.log(result, "a été trouvé"))
+        .catch((error) => console.error(error, "n'a pas été trouvé"));
+    })
+    .then(() => {
+      return collecterArtefactPromesse("épée romaine")
+        .then((result) => console.log(result, "a été trouvé"))
+        .catch((error) => console.error(error, "n'a pas été trouvé"));
+    })
+    .catch((error) => {
+      console.error("Erreur pendant le voyage :", error);
+    });
+}
+
+// missionTemporelleComplexePromesse();
+
+// exo 5 La Mission Finale Asynchrone
+
+async function missionTemporelleComplexePromesseAsync() {
+  try {
+    const destination1 = await voyagerTempsPromesse(epoques.medievale);
+    console.log("Arrive à destination :", destination1);
+
+    try {
+      const artefact1 = await collecterArtefactPromesse("épée de chevalier");
+      console.log(artefact1, "a été trouvé");
+    } catch (error) {
+      console.error(error, "n'a pas été trouvé");
+    }
+
+    const destination2 = await voyagerTempsPromesse(epoques.romaine);
+    console.log("Arrive à destination : ", destination2);
+
+    try {
+      const artefact2 = await collecterArtefactPromesse("bouclier romain");
+      console.log(artefact2, "a été trouvé");
+    } catch (error) {
+      console.error(error, "n'a pas été trouvé");
+    }
+    try {
+      const artefact3 = await collecterArtefactPromesse("épée romain");
+      console.log(artefact3, "a été trouvé");
+    } catch (error) {
+      console.error(error, "n'a pas été trouvé");
+    }
+  } catch (error) {
     console.error("Erreur pendant le voyage :", error);
-  });
+  }
+}
+
+missionTemporelleComplexePromesseAsync();
